@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jai Club - Play & Win Instantly</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;}
+body{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#fff;min-height:100vh;}
+
+header{
+position:sticky;top:0;background:linear-gradient(90deg,#3b82f6,#9333ea);padding:15px 20px;display:flex;justify-content:space-between;align-items:center;z-index:1000;box-shadow:0 4px 20px rgba(59,130,246,0.3);
+}
+header h1{font-size:24px;font-weight:700;text-shadow:0 2px 4px rgba(0,0,0,0.3);}
+header button{padding:10px 20px;margin-left:10px;border:none;border-radius:25px;cursor:pointer;font-weight:600;transition:all 0.3s ease;box-shadow:0 4px 15px rgba(0,0,0,0.2);}
+.login{background:#fff;color:#000;}
+.register{background:linear-gradient(45deg,#22c55e,#16a34a);color:#fff;}
+.login:hover,.register:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.3);}
+
+.hero{text-align:center;padding:100px 20px;background:linear-gradient(135deg,#6366f1 0%,#ec4899 50%,#f43f5e 100%);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,transparent 40%,rgba(255,255,255,0.1) 50%);animation:rotate 20s linear infinite;}
+@keyframes rotate{100%{transform:rotate(360deg);}}
+.hero h2{font-size:clamp(36px,6vw,56px);margin-bottom:15px;font-weight:800;text-shadow:0 4px 20px rgba(0,0,0,0.5);}
+.hero p{font-size:20px;margin-bottom:30px;opacity:0.95;}
+.hero button{margin-top:25px;padding:18px 40px;border:none;background:linear-gradient(45deg,#22c55e,#16a34a);border-radius:50px;color:#fff;font-size:18px;font-weight:700;cursor:pointer;transition:all 0.3s ease;box-shadow:0 8px 25px rgba(34,197,94,0.4);}
+.hero button:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(34,197,94,0.6);}
+
+.section{padding:60px 20px;max-width:1200px;margin:0 auto;}
+.section h3{margin-bottom:30px;text-align:center;font-size:32px;font-weight:700;position:relative;}
+.section h3::after{content:'';display:block;width:60px;height:4px;background:linear-gradient(90deg,#3b82f6,#9333ea);margin:15px auto;border-radius:2px;}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;}
+.card{background:linear-gradient(145deg,#1e293b,#334155);padding:30px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.4);transition:all 0.4s ease;position:relative;overflow:hidden;cursor:pointer;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#3b82f6,#9333ea);}
+.card:hover{transform:translateY(-12px) scale(1.03);box-shadow:0 25px 50px rgba(0,0,0,0.6);}
+.card h4{font-size:22px;margin-bottom:12px;color:#3b82f6;font-weight:700;}
+.card p{opacity:0.85;line-height:1.6;}
+
+button{cursor:pointer;transition:all 0.3s ease;}
+
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);justify-content:center;align-items:center;z-index:2000;}
+.modal-content{background:linear-gradient(145deg,#1e293b,#334155);padding:35px;border-radius:20px;width:90%;max-width:420px;box-shadow:0 25px 70px rgba(0,0,0,0.8);position:relative;animation:modalSlide 0.4s ease;}
+@keyframes modalSlide{from{transform:translateY(-60px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal h3{margin-bottom:25px;color:#3b82f6;text-align:center;font-size:24px;font-weight:700;}
+.modal input{width:100%;margin:15px 0;padding:15px;border:none;border-radius:12px;background:#334155;color:#fff;font-size:16px;transition:all 0.3s ease;}
+.modal input::placeholder{color:#94a3b8;}
+.modal input:focus{outline:none;box-shadow:0 0 0 3px rgba(59,130,246,0.3);background:#3f4a5a;}
+.modal button{width:100%;padding:15px;margin:10px 0;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,0.3);}
+.modal .login-btn{background:linear-gradient(45deg,#3b82f6,#9333ea);color:#fff;}
+.modal .register-btn{background:linear-gradient(45deg,#22c55e,#16a34a);color:#fff;}
+.modal button:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,0.4);}
+
+.accordion{background:linear-gradient(145deg,#1e293b,#334155);margin:15px 0;padding:20px;border-radius:15px;cursor:pointer;transition:all 0.3s ease;font-weight:600;position:relative;overflow:hidden;}
+.accordion::before{content:'▶';position:absolute;right:20px;transition:transform 0.3s ease;}
+.accordion:hover{background:linear-gradient(145deg,#334155,#475569);}
+.accordion.active{background:linear-gradient(145deg,#3b82f6,#9333ea);}
+.accordion.active::before{transform:rotate(90deg);}
+.panel{display:none;padding:20px;background:linear-gradient(145deg,#334155,#475569);border-radius:0 0 15px 15px;margin-top:-5px;border-left:4px solid #3b82f6;}
+
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:30px;}
+.info-card{background:linear-gradient(145deg,#1e293b,#334155);padding:25px;border-radius:15px;box-shadow:0 8px 25px rgba(0,0,0,0.3);border-left:5px solid #22c55e;}
+.info-card h4{color:#22c55e;font-size:18px;margin-bottom:10px;}
+
+table{width:100%;border-collapse:collapse;margin-top:20px;background:linear-gradient(145deg,#1e293b,#334155);border-radius:15px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.4);}
+th,td{padding:15px;text-align:left;border-bottom:1px solid #475569;}
+th{background:linear-gradient(90deg,#3b82f6,#9333ea);font-weight:600;}
+tr:hover{background:#334155;}
+
+footer{background:linear-gradient(180deg,#020617,#0f172a);padding:40px 20px;text-align:center;font-size:14px;border-top:1px solid #334155;}
+.footer-links a{color:#94a3b8;text-decoration:none;margin:0 15px;transition:color 0.3s ease;}
+.footer-links a:hover{color:#3b82f6;}
+
+@media(max-width:768px){
+header{padding:12px 15px;flex-direction:column;gap:15px;}
+.hero{padding:80px 15px;}
+.section{padding:40px 15px;}
+.cards{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+}
+</style>
+</head>
+
+<body>
+<header>
+<h1>🎮 Jai Club</h1>
+<div>
+<button class="login" onclick="openLogin()">Login</button>
+<button class="register" onclick="openRegister()">Register</button>
+</div>
+</header>
+
+<section class="hero">
+<h2>Welcome to Jai Club</h2>
+<p>🔥 Play & Win Instantly | Fast Payouts | 24/7 Support</p>
+<button onclick="openRegister()">Join Now - Free ₹50 Bonus</button>
+</section>
+
+<section class="section">
+<h3>🎯 Game Categories</h3>
+<div class="cards">
+<div class="card"><h4>🎨 Colour Prediction</h4><p>Red/Green/Violet - Predict & Win Big!</p></div>
+<div class="card"><h4>⚡ Instant Games</h4><p>Aviator, Crash, Mines - Quick Wins</p></div>
+<div class="card"><h4>🎰 Casino & Slots</h4><p>Slots, Roulette, Blackjack</p></div>
+<div class="card"><h4>🔥 Trending Games</h4><p>Most Popular Right Now</p></div>
+<div class="card"><h4>🃏 Card & Arcade</h4><p>Rummy, Teen Patti, Ludo</p></div>
+</div>
+</section>
+
+<section class="section">
+<h3>📱 How to Register</h3>
+<div class="info-grid">
+<div class="info-card"><h4>Step 1</h4><p>Enter Mobile Number</p></div>
+<div class="info-card"><h4>Step 2</h4><p>Create Password</p></div>
+<div class="info-card"><h4>Step 3</h4><p>Verify OTP</p></div>
+<div class="info-card"><h4>Step 4</h4><p>Add Referral (Optional)</p></div>
+</div>
+</section>
+
+<section class="section">
+<h3>💰 Deposit & Withdraw</h3>
+<div class="info-grid">
+<div class="info-card"><h4>💳 Deposit</h4><p>Min ₹100 | UPI/Paytm/Bank | Instant</p></div>
+<div class="info-card"><h4>💸 Withdraw</h4><p>Min ₹100 | Same Day | Secure</p></div>
+</div>
+</section>
+
+<section class="section">
+<h3>🎁 Gift Code</h3>
+<div style="text-align:center;font-size:18px;">
+<p>Enter Code → <strong>CLAIM50</strong> → Get ₹50 Free!</p>
+</div>
+</section>
+
+<section class="section">
+<h3>🛡️ Responsible Gaming</h3>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;">
+<div class="info-card"><h4>⚖️ Set Limits</h4><p>Daily/Weekly deposit limits</p></div>
+<div class="info-card"><h4>🎯 Play for Fun</h4><p>Gaming should be entertainment</p></div>
+<div class="info-card"><h4>👨‍👩‍👧‍👦 18+ Only</h4><p>Strict age verification</p></div>
+</div>
+</section>
+
+<section class="section">
+<h3>❓ FAQ</h3>
+<div class="accordion">What is Jai Club?</div>
+<div class="panel">Jai Club is India's leading online gaming platform offering Colour Prediction, Casino games, Card games, and instant win games with fast payouts.</div>
+
+<div class="accordion">Minimum deposit amount?</div>
+<div class="panel">Minimum deposit is just ₹100. We support UPI, Paytm, PhonePe, and bank transfers.</div>
+
+<div class="accordion">Is Jai Club safe and legal?</div>
+<div class="panel">Play responsibly. Jai Club promotes responsible gaming. 18+ only. Set limits and play for entertainment.</div>
+
+<div class="accordion">How fast are withdrawals?</div>
+<div class="panel">Withdrawals are processed within 24 hours. Minimum ₹100. Daily limits apply based on VIP level.</div>
+</section>
+
+<section class="section">
+<h3>📲 App Information</h3>
+<table>
+<tr><th>App Name</th><td>Jai Club</td></tr>
+<tr><th>Version</th><td>2.1.7 (Latest)</td></tr>
+<tr><th>Platform</th><td>Android 5.0+</td></tr>
+<tr><th>Invite Code</th><td><strong>57186116694</strong></td></tr>
+<tr><th>Size</th><td>25 MB</td></tr>
+</table>
+</section>
+
+<footer>
+<p>© 2026 Jai Club - All Rights Reserved</p>
+<div class="footer-links">
+<a href="#">Disclaimer</a>
+<a href="#">Terms & Conditions</a>
+<a href="#">Privacy Policy</a>
+<a href="#">Contact Us</a>
+</div>
+</footer>
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+<div class="modal-content">
+<h3>🔐 Login</h3>
+<input type="tel" placeholder="Mobile Number" id="loginMobile">
+<input type="password" placeholder="Password" id="loginPass">
+<button class="login-btn" onclick="login()">Login Now</button>
+</div>
+</div>
+
+<!-- REGISTER MODAL -->
+<div class="modal" id="registerModal">
+<div class="modal-content">
+<h3>🎉 Register New Account</h3>
+<input type="tel" placeholder="Mobile Number" id="regMobile">
+<input type="password" placeholder="Create Password" id="regPass">
+<input type="text" placeholder="Referral Code (Optional)" id="refCode">
+<button class="register-btn" onclick="register()">Create Account</button>
+<p style="font-size:12px;text-align:center;margin-top:10px;opacity:0.8;">Get ₹50 Welcome Bonus!</p>
+</div>
+</div>
+
+<script>
+function openLogin(){document.getElementById("loginModal").style.display="flex";document.body.style.overflow="hidden";}
+function openRegister(){document.getElementById("registerModal").style.display="flex";document.body.style.overflow="hidden";}
+
+window.onclick=function(e){
+if(e.target.classList.contains("modal")){
+e.target.style.display="none";
+document.body.style.overflow="auto";
+}
+}
+
+function login(){
+let m=document.getElementById("loginMobile").value;
+let p=document.getElementById("loginPass").value;
+if(m && p && m.length>=10){
+alert("✅ Login Successful!\nWelcome back to Jai Club 🎮");
+closeAllModals();
+}else{
+alert("❌ Please enter valid mobile & password");
+}
+}
+
+function register(){
+let m=document.getElementById("regMobile").value;
+let p=document.getElementById("regPass").value;
+if(m && p && m.length>=10){
+alert("🎉 Registration Successful!\n₹50 Welcome Bonus Credited!\nInvite Code: 57186116694");
+closeAllModals();
+}else{
+alert("❌ Please enter valid mobile & password");
+}
+}
+
+function closeAllModals(){
+document.querySelectorAll('.modal').forEach(modal => modal.style.display="none");
+document.body.style.overflow="auto";
+}
+
+// Enhanced Accordion
+let acc=document.querySelectorAll(".accordion");
+acc.forEach(a=>{
+a.onclick=function(){
+this.classList.toggle("active");
+let panel=this.nextElementSibling;
+if(panel.style.display==="block"){
+panel.style.display="none";
+}else{
+panel.style.display="block";
+}
+}
+});
+</script>
+</body>
+</html>
